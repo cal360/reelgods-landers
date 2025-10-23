@@ -1,0 +1,22 @@
+{
+  "spintru.com": {
+    "price": "€10,000",
+    "checkout": "https://secure.escrow.com/spintru-unique-transaction-link" 
+    /* Replace this with the UNIQUE Escrow/Stripe link for Spintru.com */
+  },
+  "tombwager.com": {
+    "price": "€25,000",
+    "checkout": "https://secure.escrow.com/tombwager-unique-transaction-link"
+    /* Replace this with the UNIQUE Escrow/Stripe link for TombWager.com */
+  },
+  "winatra.com": {
+    "price": "€25,000",
+    "checkout": "https://secure.escrow.com/winatra-unique-transaction-link"
+    /* Replace this with the UNIQUE Escrow/Stripe link for Winatra.com */
+  },
+  "racejumps.com": {
+    "price": "€10,000",
+    "checkout": "https://secure.escrow.com/racejumps-unique-transaction-link"
+    /* Add all your domains here! */
+  }
+}
