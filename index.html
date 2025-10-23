@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Domain for Sale</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh; margin: 0; padding: 0 1rem;
+      background-color: #f7f9fc; 
+      color: #1a1a2e; text-align: center;
+    }
+    main {
+      padding: 3rem 1.5rem; border-radius: 12px;
+      background: #ffffff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      max-width: 600px; width: 100%;
+    }
+    h1 { 
+      font-size: clamp(1.8rem, 5vw, 3rem); margin-bottom: 0.5rem; 
+      font-weight: 700; color: #0d1b2a; word-break: break-all;
+    }
+    p { font-size: 1.125rem; color: #6a7c93; margin-bottom: 1.5rem; }
+    .price { 
+      font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 700; 
+      color: #e63946; margin-bottom: 2rem; line-height: 1.1;
+    }
+    a.button {
+      display: inline-block; background: #1a1a2e; color: #ffffff;
+      padding: 1rem 2.5rem; border-radius: 999px; font-weight: 600; 
+      text-decoration: none; letter-spacing: 0.5px;
+      transition: background 0.3s ease, transform 0.1s;
+      box-shadow: 0 4px 15px rgba(26, 26, 46, 0.2);
+    }
+    a.button:hover { background: #3c4056; transform: translateY(-2px); }
+    footer { margin-top: 3rem; font-size: 0.85rem; color: #99a9c2; }
+    /* Style for the temporary loading/error message */
+    .error-message { color: #cc3333; font-weight: 600; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="domain">Loading...</h1>
+    <p>A premium domain name available for acquisition.</p>
+    <div class="price" id="price">...</div>
+    <div id="loading-error" class="error-message"></div>
+    <a id="checkout" class="button" href="#" target="_blank" rel="noopener noreferrer">Buy Now Securely</a>
+  </main>
+  
+  <footer>Part of the ReelGods Premium Collection</footer>
+
+  <script>
+    document.getElementById('loading-error').textContent = 'Loading domain data...';
+    
+    fetch('data.json')
+      .then(r => {
+          if (!r.ok) {
+              throw new Error('Data file not found or failed to load.');
+          }
+          return r.json();
+      })
+      .then(data => {
+        // Clear any loading text now that data is loaded
+        document.getElementById('loading-error').textContent = '';
+
+        const domain = window.location.hostname.toLowerCase();
+        // Use a default key for testing if the domain is the GitHub pages URL (e.g. reelgods-landers.github.io)
+        const isLiveDomain = domain.includes('.'); 
+        const lookupKey = isLiveDomain && domain !== 'localhost:8000' ? domain : 'spintru.com'; 
+        
+        const info = data[lookupKey] || {};
+
+        const domainElement = document.getElementById('domain');
+        const priceElement = document.getElementById('price');
+        const checkoutElement = document.getElementById('checkout');
+
+        // Check if data was found for the domain
+        if (!info.price) {
+             document.getElementById('loading-error').textContent = 'Error: Domain data not found in data.json.';
+             domainElement.textContent = domain;
+             priceElement.textContent = '';
+             checkoutElement.style.display = 'none';
+             document.title = `${domain} — Data Error`;
+             return;
+        }
+
+        // Update content
+        document.title = `${domain} — Premium Domain for Sale`;
+        domainElement.textContent = domain;
+        priceElement.textContent = info.price;
+        checkoutElement.href = info.checkout;
+
+        // Ensure the button is visible
+        checkoutElement.style.display = 'inline-block';
+      })
+      .catch(e => {
+          // Display a clear error if the file itself failed to load
+          document.getElementById('domain').textContent = 'System Error';
+          document.getElementById('price').textContent = '';
+          document.getElementById('loading-error').textContent = `Error: Cannot connect to data.json. Check file path or network.`;
+          document.getElementById('checkout').style.display = 'none';
+      });
+  </script>
+</body>
+</html>
